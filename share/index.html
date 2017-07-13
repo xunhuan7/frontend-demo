@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+    <title>SHARE</title>
+    <link rel="stylesheet" href="./css/share.css">
+</head>
+<body>
+
+<script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://s1.xmcdn.com/lib/ya/last/ya.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="./js/share.js"></script>
+<script>
+    new Share({
+        channel: ["qq", "qzone", "tSina", "weixin", "weixinGroup", "message"],  //分享设置（用于站内，微信默认所有渠道都配置）
+        title: "",          //标题（站内和微信通用）
+        desc: "",           //详细描述（站内和微信通用）
+        link: "",           //链接（站内和微信通用）
+        imgUrl: "",         //分享图标地址（站内和微信通用）
+        type: "",           //分享类型（默认为link，可选music、video）
+        dataUrl: "",        //资源地址（）
+        callback: function (res) {
+            //回调函数
+        }
+    });
+</script>
+</body>
+</html>
