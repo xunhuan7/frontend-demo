@@ -1,4 +1,11 @@
-var myModules = (function () {
+/*
+* 暴露一个全局变量modules
+* 定义模块：define()
+* 获取模块：get()
+*/
+
+var Modules = (function () {
+
     var modules = {};
 
     function define(name, deps, method) {
@@ -8,7 +15,7 @@ var myModules = (function () {
         modules[name] = method.apply(method, deps);
     }
 
-    function get (name) {
+    function get(name) {
         return modules[name];
     }
 
@@ -18,7 +25,8 @@ var myModules = (function () {
     }
 })();
 
-myModules.define('alert', [], function () {
+// 定义模块alert；通过get()获取，获取结果可使用return的对象内容
+Modules.define('alert', [], function () {
     function one() {
         console.log("警告1");
     }
@@ -37,7 +45,9 @@ myModules.define('alert', [], function () {
         three: three
     }
 });
-myModules.define('tips', [], function () {
+
+// 定义模块tips；通过get()获取，获取结果可使用return的对象内容
+Modules.define('tips', [], function () {
     function one() {
         console.log("提示1");
     }
@@ -56,3 +66,13 @@ myModules.define('tips', [], function () {
         three: three
     }
 });
+
+// 使用模块alert
+Modules.get("alert").one();
+Modules.get("alert").two();
+Modules.get("alert").three();
+
+// 使用模块tips
+Modules.get("tips").one();
+Modules.get("tips").two();
+Modules.get("tips").three();
