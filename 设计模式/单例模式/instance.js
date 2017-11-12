@@ -58,10 +58,15 @@ var getSingle = function (fn) {
     }
 }
 
-getSingle(function () {
+var createSingleLoginLayer = getSingle(function () {
     var div = document.createElement('div');
     div.innerHTML = '登录框';
     div.style.display = 'none';
     document.body.appendChild(div);
     return div;
 });
+
+document.getElementById('login').onclick = function () {
+    var loginLayer = createSingleLoginLayer();
+    loginLayer.style.display = 'block';
+}
