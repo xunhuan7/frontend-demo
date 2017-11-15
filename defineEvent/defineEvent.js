@@ -4,7 +4,6 @@
 
 // 方法一：判断绑定（每次调用都需要进行浏览器检测）
 function addHandler(target, type, handler) {
-    //浏览器检测
     if (target.addEventListener) {//支持DOM2
         addHandler = function (target, type, handler) {
             target.addEventListener(type, handler);
@@ -18,7 +17,6 @@ function addHandler(target, type, handler) {
 }
 
 function removeHandler(target, type, handler) {
-    //浏览器检测
     if (target.removeEventListener) {//支持DOM2
         removeHandler = function (target, type, handler) {
             target.removeHandler = function () {
