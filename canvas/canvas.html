@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>canvas</title>
+    <style type="text/css">
+        body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script type="text/javascript">
+
+    /*
+    *生成并绘制一定数量的圆，保存圆信息（x,y,r,moveX,moveY）
+    *根据圆位置绘制连线
+    *定时器：改变圆信息(moveX,moveY)；重新绘制圆；重新绘制连线
+    * */
+    (function () {
+
+        // 定义画布
+        var WIDTH = window.innerWidth,
+            HEIGHT = window.innerHeight,
+            POINT = 50;
+        console.log(WIDTH + '' + HEIGHT)
+        var canvas = document.getElementById('canvas'),
+            ctx = canvas.getContext('2d'),
+            circleArr = [];
+
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+        ctx.strokeStyle = 'rgba(0,0,0,0.02)';
+        ctx.strokeWidth = 1;
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
+
+        // 生成范围内的随机数
+        function num(max, min) {
+            var min = arguments[1] || 0;
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+        // 构造函数：圆和线
+        function Circle(x, y, r, moveX, moveY) {
+            this.x = x;
+            this.y = y;
+            this.r = r;
+            this.moveX = moveX;
+            this.moveY = moveY;
+        }
+
+        function Line(beginX, beginY, endX, endY, opacity) {
+            this.beginX = beginX;
+            this.beginY = beginY;
+            this.endX = endX;
+            this.endY = endY;
+            this.opacity = opacity;
+        }
+
+        // 绘制圆并返回圆信息
+        function drawCircle(x, y, r, moveX, moveY) {
+            var circle = new Circle(x, y, r, moveX, moveY);
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+            return circle;
+        }
+
+        // 绘制线
+        function drawLine(beginX, beginY, endX, endY, opacity) {
+            var line = new Line(beginX, beginY, endX, endY, opacity);
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0,0,0,' + opacity + ')';
+            ctx.moveTo(line.beginX, line.beginY);
+            ctx.lineTo(line.endX, line.endY);
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+        // 每帧绘制：圆和连线
+        function draw() {
+            // 清空画布
+            ctx.clearRect(0, 0, WIDTH, HEIGHT);
+            // 画圆
+            for (var i = 0; i < POINT; i++) {
+                drawCircle(circleArr[i].x, circleArr[i].y, circleArr[i].r);
+            }
+            for (var m = 0; m < POINT; m++) {
+                for (var n = 0; n < POINT; n++) {
+                    if (m + n < POINT) {
+                        // 根据两圆之间的距离动态生成连线的透明度
+                        var a = Math.abs(circleArr[m + n].x - circleArr[m].x),
+                            b = Math.abs(circleArr[m + n].y - circleArr[m].y),
+                            lineLength = Math.sqrt(a * a + b * b),
+                            c = 1 / lineLength * 7 - 0.009,
+                            lineOpacity = c > 0.03 ? 0.03 : c;
+                        if (lineOpacity > 0) {
+                            drawLine(circleArr[m].x, circleArr[m].y, circleArr[m + n].x, circleArr[m + n].y, lineOpacity);
+                        }
+                    }
+                }
+            }
+        }
+
+        function init() {
+            // 生成随机大小和随机位置的圆并保存
+            for (var i = 0; i < POINT; i++) {
+                circleArr.push(drawCircle(num(WIDTH), num(HEIGHT), num(10, 5), num(10, -10) / 40, num(10, -10) / 40));
+            }
+            draw();
+        }
+
+        init();
+        setInterval(function () {
+
+            // 改变圆的位置
+            for (var i = 0; i < POINT; i++) {
+
+                var circle = circleArr[i];
+
+                circle.x += circle.moveX;
+                circle.y += circle.moveY;
+
+                // 范围判定
+                if (circle.x > WIDTH) {
+                    circle.x = 0;
+                } else if (circle.x < 0) {
+                    circle.x = WIDTH;
+                }
+                if (circle.y > HEIGHT) {
+                    circle.y = 0;
+                } else if (circle.y < 0) {
+                    circle.y = HEIGHT;
+                }
+
+            }
+            draw();
+        }, 20);
+
+    })();
+
+</script>
+
+</body>
+</html>
